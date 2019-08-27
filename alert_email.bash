@@ -24,11 +24,16 @@ do
     fi 
 done < "$logs"
 
-if [ $existingIndice -lt 1 ] && [ $isError -gt 0 ]; then
-    #sent alert if indice isn't created for today
-    printf "**********Logstash**********\nelastiflow-3.3.0-$sysTime is not exist" | mail -s "Logstash Alert" "duynv@kdata.vn"
+if [[ $isError -gt 0 ]]; then 
     tail -100 /var/log/logstash/logstash-plain.log | mail -s "Log of Logstash" "duynv@kdata.vn"
     #fixing error 403
     curl -XPUT -H "Content-Type: application/json" http://localhost:9200/_all/_settings -d '{"index.blocks.read_only_allow_delete": null}'
     systemctl restart logstash
+    printf "Error 403 was fixed." | mail -s "Logstash Error" "duynv@kdata.vn"
+else
+    if [[ $existingIndice -lt 1 ]]; then
+        #sent alert if indice isn't created for today
+        printf "**********Logstash**********\nelastiflow-3.3.0-$sysTime is not exist" | mail -s "Logstash Alert" "duynv@kdata.vn"
+        
+    fi
 fi
