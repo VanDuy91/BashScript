@@ -41,7 +41,9 @@ done < "$logs"
 
 
 if [[ $isError403 -gt 0 ]]; then 
-	tail -100 /var/log/logstash/logstash-plain.log | mail -s "Log of Logstash" "duynv@kdata.vn"
+    df -lh > test.txt 
+	tail -100 /var/log/logstash/logstash-plain.log >> test.txt
+    cat test.txt | mail -s "Logstash Error 403" "duynv@kdata.vn"
 	if [[ $existingIndice -gt 0 ]]; then
 		/usr/bin/curator --config /root/.curator/curator.yml /root/.curator/action-2-day.yml
 		#curl -XDELETE localhost:9200/elastiflow-3.3.0-$sysTime
