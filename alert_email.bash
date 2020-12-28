@@ -55,11 +55,11 @@ if [[ $isError403 -gt 0 ]]; then
 	systemctl restart logstash
     echo "[$(date)] logstash restarted" >> logcode.txt
 	printf "Error 403 was fixed." | mail -s "Logstash Error" "duynv@kdata.vn"
-else
-    if [[ $existingIndice -lt 1 ]]; then
+#else
+#    if [[ $existingIndice -lt 1 ]]; then
         #sent alert if indice isn't created for today
-        printf "**********Logstash**********\nelastiflow-3.3.0-$sysTime is not exist" | mail -s "Logstash Alert" "duynv@kdata.vn"  
-    fi
+#        printf "**********Logstash**********\nelastiflow-3.3.0-$sysTime is not exist" | mail -s "Logstash Alert" "duynv@kdata.vn"  
+#    fi
 fi
 
 if [[ $isError503 -gt 0 ]]; then
